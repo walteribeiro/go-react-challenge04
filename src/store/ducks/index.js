@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import firstDuck from './firstDuck';
+import shopping from './shopping';
 
 export default combineReducers({
-  firstDuck,
+  shopping,
 });
