@@ -1,7 +1,7 @@
 import { all, takeLatest } from 'redux-saga/effects';
-import { Types as ShoppingTypes } from '../ducks/shopping';
-import { shopping } from './shopping';
+import { Types as ProductTypes } from '../ducks/product';
+import { product } from './product';
 
 export default function* rootSaga() {
-  yield all([takeLatest(ShoppingTypes.GET_REQUEST, shopping)]);
+  yield all([takeLatest(ProductTypes.GET_REQUEST, product)]);
 }

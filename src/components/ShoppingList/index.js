@@ -1,17 +1,54 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Creators as ProductActions } from '../../store/ducks/product';
+
 import { Container, List, Item } from './styles';
 
-const ShoppingList = () => (
-  <Container>
-    <List>
-      <Item>
-        <img src="https://t-static.dafiti.com.br/czCvp3wBNPfehf7omYZfJacnxPY=/fit-in/427x620/dafitistatic-a.akamaihd.net%2fp%2fquiksilver-camiseta-quiksilver-hyperas-preta-8710-7136243-1-product.jpg" alt="Shirt" />
-        <strong>Camiseta Trok</strong>
-        <span>Element</span>
-        <p>R$ 50,00</p>
-      </Item>
-    </List>
-  </Container>
-);
+export class ShoppingList extends Component {
+  static propTypes = {
+    product: PropTypes.shape({
+      loading: PropTypes.bool,
+      data: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        brand: PropTypes.string,
+        price: PropTypes.number,
+      })),
+    }).isRequired,
+    getProductsRequest: PropTypes.func.isRequired,
+  };
 
-export default ShoppingList;
+  componentDidMount() {
+    this.props.getProductsRequest();
+  }
+
+  render() {
+    return (
+      <Container>
+        <List>
+          {this.props.product.data.map(item => (
+            <Item key={item.id}>
+              <img src={item.image} alt={item.name} />
+              <strong>{item.name}</strong>
+              <span>{item.brand}</span>
+              <p>R$ {item.price}</p>
+            </Item>
+          ))}
+        </List>
+      </Container>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  product: state.product,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators(ProductActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ShoppingList);
